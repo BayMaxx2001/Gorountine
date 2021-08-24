@@ -38,7 +38,6 @@ func SplitString(data string) model.SimpleData {
 	return model.SimpleData{listData}
 }
 
-
 func WriteFile(fileName string, content model.SimpleData, wg *sync.WaitGroup) {
 
 	randomNum := 3 + rand.Intn(6-3+1)

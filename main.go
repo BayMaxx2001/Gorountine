@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"sync"
 	"time"
-	"strconv"
 
 	"Goroutine/model"
 	"Goroutine/utils"
@@ -13,7 +13,7 @@ import (
 func sendDataToChan(chanSend chan<- model.SimpleData, filePath string) {
 	var (
 		listData model.SimpleData
-		wg		 sync.WaitGroup
+		wg       sync.WaitGroup
 	)
 	for i := 1; i <= 5; i++ {
 		wg.Add(1)
@@ -30,12 +30,11 @@ func sendDataToChan(chanSend chan<- model.SimpleData, filePath string) {
 
 func saveFile(done chan bool, chanReceive <-chan model.SimpleData) {
 	var (
-		count 	= 0
-		wg		sync.WaitGroup
+		count = 0
+		wg    sync.WaitGroup
 	)
 	for content := range chanReceive {
-		count ++
-		fmt.Println(count, content)
+		count++
 		wg.Add(1)
 		go utils.WriteFile("output"+strconv.Itoa(count)+".txt", content, &wg)
 	}
