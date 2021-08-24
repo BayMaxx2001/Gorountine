@@ -3,11 +3,11 @@ package utils
 import (
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
 	"strings"
-	"time"
 	"sync"
-	"math/rand"
+	"time"
 
 	"Goroutine/model"
 )
@@ -17,13 +17,12 @@ func ReadFile(filePath string) string {
 	log.Println("time read input:", randomNum)
 	time.Sleep(time.Duration(randomNum) * time.Second)
 
-
 	data, err := ioutil.ReadFile(filePath)
-	
+
 	if err != nil {
 		log.Fatalf("File reading error", err)
 	}
-	
+
 	return string(data)
 }
 
@@ -39,15 +38,6 @@ func SplitString(data string, wg *sync.WaitGroup) model.SimpleData {
 	return model.SimpleData{listData}
 }
 
-func DoTask1(data string, id int)string{
-	if  (id % 2) == 0 {
-		data = strings.ToUpper(data)
-	} else {
-		data = strings.ToLower(data)
-	}
-	time.Sleep(10*time.Second)
-	return data 
-}
 
 func WriteFile(fileName string, content model.SimpleData) {
 
@@ -61,7 +51,7 @@ func WriteFile(fileName string, content model.SimpleData) {
 		log.Fatalln("Error open file", err)
 	}
 	defer f.Close()
-	
+
 	for i := range content.Data {
 		if _, err := f.WriteString(content.Data[i] + "\n"); err != nil {
 			log.Println("Error write:", err)
