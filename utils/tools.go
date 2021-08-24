@@ -22,7 +22,7 @@ func ReadFile(filePath string) string {
 	if err != nil {
 		log.Fatalf("File reading error", err)
 	}
-	// defer wg.Done()
+
 	return string(data)
 }
 
@@ -33,7 +33,6 @@ func SplitString(data string) model.SimpleData {
 	log.Println("time handling:", randomNum)
 	time.Sleep(time.Duration(randomNum) * time.Second)
 
-	// defer wg.Done()
 
 	return model.SimpleData{listData}
 }
