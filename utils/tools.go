@@ -22,24 +22,24 @@ func ReadFile(filePath string) string {
 	if err != nil {
 		log.Fatalf("File reading error", err)
 	}
-
+	// defer wg.Done()
 	return string(data)
 }
 
-func SplitString(data string, wg *sync.WaitGroup) model.SimpleData {
+func SplitString(data string) model.SimpleData {
 	listData := strings.Fields(data)
 
 	randomNum := 6 + rand.Intn(15-6+1)
 	log.Println("time handling:", randomNum)
 	time.Sleep(time.Duration(randomNum) * time.Second)
 
-	wg.Done()
+	// defer wg.Done()
 
 	return model.SimpleData{listData}
 }
 
 
-func WriteFile(fileName string, content model.SimpleData) {
+func WriteFile(fileName string, content model.SimpleData, wg *sync.WaitGroup) {
 
 	randomNum := 3 + rand.Intn(6-3+1)
 	log.Println("time write output:", randomNum)
@@ -63,4 +63,6 @@ func WriteFile(fileName string, content model.SimpleData) {
 		log.Println(err)
 	}
 	log.Println("Successfully")
+
+	wg.Done()
 }

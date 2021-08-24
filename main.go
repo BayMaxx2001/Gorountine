@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"time"
+	"strconv"
 
 	"Goroutine/model"
 	"Goroutine/utils"
@@ -12,25 +13,33 @@ import (
 func sendDataToChan(chanSend chan<- model.SimpleData, filePath string) {
 	var (
 		listData model.SimpleData
-		wg       sync.WaitGroup
+		wg		 sync.WaitGroup
 	)
 	for i := 1; i <= 5; i++ {
 		wg.Add(1)
-		go func() {
+		go func(wg *sync.WaitGroup) {
 			data := utils.ReadFile(filePath)
-			listData = utils.SplitString(data, &wg)
-		}()
+			listData = utils.SplitString(data)
+			chanSend <- listData
+			wg.Done()
+		}(&wg)
 	}
 	wg.Wait()
-	chanSend <- listData
 	close(chanSend)
 }
 
 func saveFile(done chan bool, chanReceive <-chan model.SimpleData) {
-
+	var (
+		count 	= 0
+		wg		sync.WaitGroup
+	)
 	for content := range chanReceive {
-		utils.WriteFile("output.txt", content)
+		count ++
+		fmt.Println(count, content)
+		wg.Add(1)
+		go utils.WriteFile("output"+strconv.Itoa(count)+".txt", content, &wg)
 	}
+	wg.Wait()
 	done <- true
 }
 
